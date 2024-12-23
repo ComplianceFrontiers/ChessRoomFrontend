@@ -16,8 +16,6 @@ const server = http.createServer(app);
 const io = socket(server, {
   cors: {
     origin: 'https://chess-room-front.vercel.app', // Your front-end URL
-    methods: ['GET', 'POST'],
-    allowedHeaders: ['Content-Type'],
     credentials: true,
   }
 });
