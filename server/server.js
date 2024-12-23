@@ -22,6 +22,7 @@ module.exports = (req, res) => {
 
 // Handle WebSocket connections (existing code)
 games = {};
+console.log("sssss",{games})
 myIo(io);
 
 console.log("WebSocket server started.");

@@ -15,6 +15,8 @@ module.exports = io => {
         socket.on('joinGame', function(data) {
 
             currentCode = data.code;
+            console.log("sssss",games,currentCode)
+
             socket.join(currentCode);
             if (!games[currentCode]) {
                 games[currentCode] = true;
