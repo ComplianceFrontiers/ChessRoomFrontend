@@ -9,20 +9,11 @@ const myIo = require('./sockets/io');
 const routes = require('./routes/routes');
 
 // Initialize the app and HTTP server
-const app = express();
-const server = http.createServer(app);
+const app = express(),
+      server = http.Server(app),
+      io = socket(server);
+server.listen("https://chess-room-front.vercel.app");
 
-// Set up Socket.IO with CORS dynamically
-const io = socket(server, {
-  cors: {
-    origin: (origin, callback) => {
-      // Allow all origins during development, but restrict in production if needed
-      callback(null, true); 
-    },
-    methods: ['GET', 'POST'],
-    credentials: true,
-  },
-});
 
 // Handle WebSocket connections
 games = {};
