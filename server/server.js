@@ -12,7 +12,7 @@ const routes = require('./routes/routes');
 const app = express();
 const server = http.createServer(app);
 const io = socket(server);
-
+myIo(io);
 // Set up Handlebars
 const Handlebars = handlebars.create({
   extname: '.html',
@@ -36,7 +36,7 @@ module.exports = (req, res) => {
 };
 
 // Start the WebSocket server
-myIo(io);
+
 
 // Handle WebSocket connections (existing code)
 games = {};
