@@ -12,31 +12,35 @@ const routes = require('./routes/routes');
 const app = express();
 const server = http.createServer(app);
 
-// Set up Socket.IO with CORS configuration
+// Set up Socket.IO with CORS dynamically
 const io = socket(server, {
   cors: {
-    origin: 'https://chess-room-front.vercel.app', // Your front-end URL
+    origin: (origin, callback) => {
+      // Allow all origins during development, but restrict in production if needed
+      callback(null, true); 
+    },
+    methods: ['GET', 'POST'],
     credentials: true,
-  }
+  },
 });
+
+// Handle WebSocket connections
+games = {};
+myIo(io);
+
+console.log('WebSocket server started.');
 
 // Export the server for Vercel serverless function
 module.exports = (req, res) => {
   server.emit('request', req, res);
 };
 
-// Handle WebSocket connections (existing code)
-let games = {};
-myIo(io);
-
-console.log("WebSocket server started.");
-
 // Set up Handlebars for templating
 const Handlebars = handlebars.create({
   extname: '.html',
   partialsDir: path.join(__dirname, '..', 'front', 'views', 'partials'),
   defaultLayout: false,
-  helpers: {}
+  helpers: {},
 });
 app.engine('html', Handlebars.engine);
 app.set('view engine', 'html');
