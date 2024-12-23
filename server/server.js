@@ -10,24 +10,30 @@ const routes = require('./routes/routes');
 
 // Initialize the app and HTTP server
 const app = express();
-
 const server = http.createServer(app);
-const io = socket(server);
+
+// Set up Socket.IO with CORS configuration
+const io = socket(server, {
+  cors: {
+    origin: 'https://chess-room-front.vercel.app', // Your front-end URL
+    methods: ['GET', 'POST'],
+    allowedHeaders: ['Content-Type'],
+    credentials: true,
+  }
+});
 
 // Export the server for Vercel serverless function
 module.exports = (req, res) => {
   server.emit('request', req, res);
 };
 
-
 // Handle WebSocket connections (existing code)
-games = {};
-console.log("sssss",{games})
+let games = {};
 myIo(io);
 
 console.log("WebSocket server started.");
 
-// Set up Handlebars
+// Set up Handlebars for templating
 const Handlebars = handlebars.create({
   extname: '.html',
   partialsDir: path.join(__dirname, '..', 'front', 'views', 'partials'),
@@ -38,9 +44,8 @@ app.engine('html', Handlebars.engine);
 app.set('view engine', 'html');
 app.set('views', path.join(__dirname, '..', 'front', 'views'));
 
-// Static files setup
+// Serve static files
 app.use('/public', express.static(path.join(__dirname, '..', 'front', 'public')));
 
 // Initialize routes
 routes(app);
-
