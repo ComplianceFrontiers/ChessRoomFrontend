@@ -10,6 +10,7 @@ module.exports = app => {
         });
     });
     app.get('/black', (req, res) => {
+        console.log({games})
         if (!games[req.query.code]) {
             return res.redirect('/?error=invalidCode');
         }
