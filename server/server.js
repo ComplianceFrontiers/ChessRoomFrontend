@@ -10,8 +10,15 @@ const routes = require('./routes/routes');
 
 // Initialize the app and HTTP server
 const app = express();
+
 const server = http.createServer(app);
 const io = socket(server);
+
+// Export the server for Vercel serverless function
+module.exports = (req, res) => {
+  server.emit('request', req, res);
+};
+
 
 // Handle WebSocket connections (existing code)
 games = {};
@@ -35,9 +42,4 @@ app.use('/public', express.static(path.join(__dirname, '..', 'front', 'public'))
 
 // Initialize routes
 routes(app);
-
-// Export the server for Vercel serverless function
-module.exports = (req, res) => {
-  server.emit('request', req, res);
-};
 
